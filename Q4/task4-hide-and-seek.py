@@ -25,7 +25,7 @@ os.makedirs(output_dir, exist_ok=True)
 marker = b"STEGO1:"
 
 # The IV is 16 bytes and is stored in front of the encrypted message
-iv = 16
+iv_length = 16
 
 # JPEG marker codes (every marker is 0xFF followed by a code byte)
 start = 0xDA           # start of scan, the compressed pixel data begins here
@@ -40,7 +40,7 @@ def encrypt_message(message):
     symmetric_key = os.urandom(32)
 
     # Encrypt the data with AES CFB mode using a random IV
-    iv = os.urandom(iv)
+    iv = os.urandom(iv_length)
     cipher = Cipher(algorithms.AES(symmetric_key), modes.CFB(iv))
     encryptor = cipher.encryptor()
     encrypted_message = encryptor.update(message.encode("utf-8")) + encryptor.finalize()
@@ -183,13 +183,13 @@ def reveal():
         print("Hidden data is corrupted.")
         return
 
-    if len(payload) <= iv:
+    if len(payload) <= iv_length:
         print("Hidden data is incomplete.")
         return
 
     # the first 16 bytes are the IV, the rest is the encrypted message
-    iv = payload[:iv]
-    encrypted_message = payload[iv:]
+    iv = payload[:iv_length]
+    encrypted_message = payload[iv_length:]
     print("IV (Initialization Vector):", b64encode(iv).decode())
     print("Encrypted Message:", b64encode(encrypted_message).decode())
 
