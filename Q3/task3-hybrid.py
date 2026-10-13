@@ -22,6 +22,8 @@ Lectorial 8 - hybrid_crypto.py
       - the encrypted file and the encrypted AES key are saved to files
       - all file paths use the BASE variable
       - the RSA public and private keys and the AES key are also displayed
+      - the program prompts the user to type the message, which is saved
+        to input/task2.txt and then encrypted as a file
 
 Lectorial 5 - aes_cfb_file.py
     What we used from it:
@@ -67,6 +69,23 @@ decrypted_file = os.path.join(output_dir, "task2_dec.txt")
 os.makedirs(keys_dir, exist_ok=True)
 os.makedirs(output_dir, exist_ok=True)
 
+# ask the user for the message and save it to the input file
+def get_message():
+    # make sure the input folder exists before saving the file
+    os.makedirs(os.path.dirname(input_file), exist_ok=True)
+
+    # keep asking until the user types something
+    while True:
+        text = input("Enter an appropriate message to encrypt: ").strip()
+        if text == "":
+            print("Error: The message cannot be empty.")
+        else:
+            break
+
+    # save the message so the rest of the program can read it as a file
+    with open(input_file, "w", encoding="utf-8") as f:
+        f.write(text)
+    print("Message saved to the input folder as task2.txt")
 
 # Generating RSA keys where each key is saved in its own file
 def generate_rsa_keys():
@@ -171,6 +190,8 @@ def decrypt_message():
 
 
 if __name__ == "__main__":
+    get_message()
+
     # Generate RSA keys
     private_pem, public_pem = generate_rsa_keys()
     print("RSA public key:")
