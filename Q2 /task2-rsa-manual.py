@@ -47,6 +47,8 @@ def is_prime(n):
 # Validating first prime value p, must be at least 5 digits
 while True:
     try:
+        # FOR TESTING PURPOSES PLEASE ENTER IN THIS NUMBER
+        # 10007
         p = int(input("Enter a prime number p (5 or more digits): "))
         
         # If p is less than 5 digits then error message
@@ -67,6 +69,8 @@ while True:
 # Validating second prime value q, must be at least 5 digits
 while True:
     try:
+        # FOR TESTING PURPOSES PLEASE ENTER IN THIS NUMBER
+        # 10009
         q = int(input("Enter prime number q (5 or more digits): "))
 
         # If q is less than 5 digits then error message
@@ -115,6 +119,8 @@ def is_valid_e(e, ntotient):
 # Validating public exponent e, must be between 1 and n-totient and share no factors with n-totient
 while True:
     try:
+        # FOR TESTING PURPOSES PLEASE ENTER IN THIS NUMBER
+        # 65537
         e = int(input("Please enter a valid e: "))
 
         if is_valid_e(e, ntotient):
@@ -140,10 +146,13 @@ print("Check: (e * d) mod phi(n) =", (e * d) % ntotient)
 # Validating user plaintext, must be 7 digits of student ID without s
 while True:
     try:
+        # FOR TESTING PURPOSES PLEASE ENTER IN THIS NUMBER
+        # STUDENT ID#1: 4167085 
+        # STUDENT ID#2: 4169495
         user_input_msg = int(input("Enter valid student ID: "))
 
-        if len(str(user_input_msg)) != 7:
-            print("Student ID must have 7 digits.")
+        if len(str(user_input_msg)) < 7:
+            print("Student ID must have 7 or more digits.")
         elif user_input_msg >= n:
             print("Message must be smaller than n.")
         else:
