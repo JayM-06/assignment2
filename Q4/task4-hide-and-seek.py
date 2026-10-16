@@ -1,3 +1,45 @@
+"""
+Q4: Steganography - hide an AES encrypted message inside a JPEG
+ 
+LECTORIAL CODE REFERENCES
+Lectorial 8 - hybrid_crypto.py
+    What we used from it:
+      - the structure of encrypt_message() and decrypt_message()
+      - os.urandom(32) for a random AES-256 key and os.urandom(16) for the IV
+      - Cipher(algorithms.AES(key), modes.CFB(iv)) with the encryptor and
+        decryptor to encrypt and decrypt the data
+      - b64encode to print the key and encrypted values to the user
+    What we changed:
+      - there is no RSA, the AES key is saved in the keys folder instead
+      - the message is typed in by the user instead of being a fixed string
+      - the encrypted message is hidden inside a JPEG file
+ 
+Lectorial 5 - aes_cfb_file.py
+    What we used from it:
+      - it showed that AES in CFB mode needs no padding
+      - reading and writing files as bytes ("rb" and "wb")
+      - storing the IV at the start of the encrypted data and reading the
+        first 16 bytes back as the IV when decrypting
+      - the BASE = os.path.dirname(os.path.abspath(__file__)) line
+ 
+Steganography technique: METADATA
+    The encrypted message is stored in a JPEG comment segment (marker FF FE).
+    The pixel data is never changed so the picture looks exactly the same.
+    We chose metadata rather than LSB because JPEG compression is lossy, so
+    bits changed in the pixels would be destroyed when saved as a JPEG.
+     
+How the program works:
+1. the user types a plaintext message
+2. the message is encrypted with a random AES-256 key (CFB mode), the key
+    is saved in the keys folder
+3. the IV and the encrypted message are hidden in image.jpeg, saved as stego.jpeg
+4. reveal finds the hidden data in stego.jpeg and decrypts it with the saved key
+
+References:
+https://www.youtube.com/watch?v=BVDl9sLeEv8
+https://www.youtube.com/watch?v=NbghA0yq1lY
+"""
+
 # uses cryptography library
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from base64 import b64encode, b64decode
