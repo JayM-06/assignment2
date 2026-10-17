@@ -38,6 +38,8 @@ How the program works:
 References:
 https://www.youtube.com/watch?v=BVDl9sLeEv8
 https://www.youtube.com/watch?v=NbghA0yq1lY
+https://docs.fileformat.com/image/jpeg/
+https://salivity.github.io/jpeg/article/can-a-jpeg-have-multiple-comment-markers
 """
 
 # uses cryptography library
@@ -109,10 +111,10 @@ def decrypt_message(iv, encrypted_message):
     return symmetric_key, decrypted_message
 
 
-# list the segments of the JPEG
-# a JPEG is a series of segments: 0xFF, a code byte, a 2 byte length, then data
-# the length includes its own 2 bytes. We stop when the pixel data starts
-# returns a list of (code, start, end) positions in the file
+# go through the JPEG and list the sections at the start of the file
+# each section starts with 0xFF, then a code for its type, then its length
+# we keep going until we reach the picture data, then stop
+# returns a list of (type, start position, end position) for each section
 def list_segments(data):
     segments = []
     pos = 2  # skip the 2 byte start of image marker
@@ -238,7 +240,7 @@ def reveal():
     recovered_key, decrypted_message = decrypt_message(iv, encrypted_message)
     print("Recovered AES key:", b64encode(recovered_key).decode())
 
-    # CFB has no check for a wrong key, it gives garbage
+    # CFB has no check for a wrong key
     # so if the result is not readable text we assume the key was wrong
     try:
         text = decrypted_message.decode("utf-8")
